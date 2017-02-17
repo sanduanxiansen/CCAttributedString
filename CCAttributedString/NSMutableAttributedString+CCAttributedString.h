@@ -16,11 +16,27 @@ typedef NSMutableAttributedString * (^CCAttributedStringFolatBlock)(CGFloat);
 
 @interface NSMutableAttributedString (CCAttributedString)
 
-- (CCAttributedStringObjBlock)color;
-- (CCAttributedStringObjBlock)font;
+- (NSMutableAttributedString *(^)(UIColor *))textColor;
+- (NSMutableAttributedString *(^)(UIColor *))backgroundColor;
+- (NSMutableAttributedString *(^)(UIFont *))font;
+- (NSMutableAttributedString *(^)(BOOL))obliqueness;
+- (NSMutableAttributedString *(^)(BOOL))expansion;
+- (NSMutableAttributedString *(^)(BOOL))underline;
+- (NSMutableAttributedString *(^)(UIColor *))underlineColor;
+- (NSMutableAttributedString *(^)(UIColor *))strokeColor;
+- (NSMutableAttributedString *(^)(CGFloat))strokeWidth;
+- (NSMutableAttributedString *(^)(BOOL))strikethrough;
+- (NSMutableAttributedString *(^)(UIColor *))strikethroughColor;
 - (CCAttributedStringObjBlock)rangeString;
 - (CCAttributedStringRangeBlock)range;
 - (CCAttributedStringFolatBlock)lineSpace;
-- (CCAttributedStringFolatBlock)textSpace;
+- (NSMutableAttributedString *(^)(CGFloat))textSpace;
+- (NSMutableAttributedString *(^)(NSTextAttachment *,NSInteger))attachment;
+
+- (NSMutableAttributedString *(^)())all;
+- (NSMutableAttributedString *(^)(NSInteger))rangeIndex;
+
+
+- (NSArray *)rangeOfSubString:(NSString *)subString;
 
 @end
