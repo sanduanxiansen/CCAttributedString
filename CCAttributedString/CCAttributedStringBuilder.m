@@ -2,7 +2,7 @@
 //  CCAttributedStringBuilder.m
 //  CCAttributedString
 //
-//  Created by Daniujia on 2017/2/16.
+//  Created by CC on 2017/2/16.
 //  Copyright © 2017年 CC. All rights reserved.
 //
 

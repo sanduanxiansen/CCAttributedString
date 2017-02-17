@@ -2,13 +2,12 @@
 //  NSMutableAttributedString+CCAttributedString.m
 //  CCAttributedString
 //
-//  Created by Daniujia on 2017/2/14.
+//  Created by CC on 2017/2/14.
 //  Copyright © 2017年 CC. All rights reserved.
 //
 
 #import "NSMutableAttributedString+CCAttributedString.h"
 #import <objc/runtime.h>
-//#import <CoreText/CoreText.h>
 #import "CCAttributedStringBuilder.h"
 
 
@@ -78,8 +77,8 @@ static const char *attributedBuilderKey = "attributedBuilder";
     };
 }
 
-- (NSMutableAttributedString *(^)(BOOL))underline {
-    return ^ id (BOOL underline) {
+- (NSMutableAttributedString *(^)(NSUnderlineStyle))underline {
+    return ^ id (NSUnderlineStyle underline) {
         self.attributedBuilder.underline = @(underline);
         return self;
     };
@@ -119,7 +118,49 @@ static const char *attributedBuilderKey = "attributedBuilder";
     };
 }
 
-- (CCAttributedStringFolatBlock)lineSpace {
+- (NSMutableAttributedString *(^)(BOOL))ligature {
+    return ^ id (BOOL ligature) {
+        self.attributedBuilder.ligature = @(ligature);
+        return self;
+    };
+}
+
+- (NSMutableAttributedString *(^)(NSShadow *))shadow {
+    return ^ id (NSShadow *shadow) {
+        self.attributedBuilder.shadow = shadow;
+        return self;
+    };
+}
+
+- (NSMutableAttributedString *(^)(BOOL))effectLetterpressStyle {
+    return ^ id (BOOL effectLetterpressStyle) {
+        self.attributedBuilder.effectLetterpressStyle = @(effectLetterpressStyle);
+        return self;
+    };
+}
+
+- (NSMutableAttributedString *(^)(CGFloat))baselineOffset {
+    return ^ id (CGFloat baselineOffset) {
+        self.attributedBuilder.baselineOffset = @(baselineOffset);
+        return self;
+    };
+}
+
+- (NSMutableAttributedString *(^)(id))writingDirection {
+    return ^ id (id writingDirection) {
+        self.attributedBuilder.writingDirection = writingDirection;
+        return self;
+    };
+}
+
+- (NSMutableAttributedString *(^)(NSURL *))link {
+    return ^ id (NSURL *link) {
+        self.attributedBuilder.link = link;
+        return self;
+    };
+}
+
+- (NSMutableAttributedString *(^)(CGFloat))lineSpace {
     return ^ id (CGFloat space) {
         [self lineSpaceWithSpace:space];
         return self;
@@ -133,7 +174,7 @@ static const char *attributedBuilderKey = "attributedBuilder";
     };
 }
 
-- (CCAttributedStringObjBlock)rangeString {
+- (NSMutableAttributedString *(^)(id))rangeString {
     return ^ id (id rangeObj) {
         
         void(^addBlock)(NSString *) = ^ (NSString *targetString) {
@@ -160,7 +201,7 @@ static const char *attributedBuilderKey = "attributedBuilder";
     };
 }
 
-- (CCAttributedStringRangeBlock)range {
+- (NSMutableAttributedString *(^)(NSRange))range {
     return ^ id (NSRange range) {
         [self addAttributesWithRange:range];
         return self;
@@ -186,10 +227,6 @@ static const char *attributedBuilderKey = "attributedBuilder";
         return self;
     };
 }
-
-
-
-
 
 #pragma mark - private
 
@@ -248,6 +285,12 @@ static const char *attributedBuilderKey = "attributedBuilder";
     [self textStrokeWidthWithObj:targetString];
     [self textStrikethroughWithObj:targetString];
     [self textStrikethroughColorWithObj:targetString];
+    [self textLigatureWithObj:targetString];
+    [self textShadowWithObj:targetString];
+    [self textEffectLetterpressStyleWithObj:targetString];
+    [self textBaselineOffsetWithObj:targetString];
+    [self textWriteDirectionWithObj:targetString];
+    [self textLinkWithObj:targetString];
 }
 
 - (void)addAttributesWithRange:(NSRange)range {
@@ -263,6 +306,12 @@ static const char *attributedBuilderKey = "attributedBuilder";
     [self textStrokeWidthWithRange:range];
     [self textStrikethroughWithRange:range];
     [self textStrikethroughColorWithRange:range];
+    [self textLigatureWithRange:range];
+    [self textShadowWithRange:range];
+    [self textEffectLetterpressStyleWithRange:range];
+    [self textBaselineOffsetWithRange:range];
+    [self textWriteDirectionWithRange:range];
+    [self textLinkWithRange:range];
 }
 
 
@@ -406,6 +455,70 @@ static const char *attributedBuilderKey = "attributedBuilder";
 }
 
 
+- (void)textLigatureWithObj:(NSString *)targetString {
+    [self textStrikethroughColorWithRange:[self getRangeWithObj:targetString]];
+}
+
+- (void)textLigatureWithRange:(NSRange)range {
+    if (!self.attributedBuilder.ligature) return;
+    [self addAttribute:NSLigatureAttributeName value:self.attributedBuilder.ligature range:range];
+    if (!self.attributedBuilder.isAddingInArray) self.attributedBuilder.ligature = nil;
+}
+
+
+- (void)textShadowWithObj:(NSString *)targetString {
+    [self textShadowWithRange:[self getRangeWithObj:targetString]];
+}
+
+- (void)textShadowWithRange:(NSRange)range {
+    if (!self.attributedBuilder.shadow) return;
+    [self addAttribute:NSShadowAttributeName value:self.attributedBuilder.shadow range:range];
+    if (!self.attributedBuilder.isAddingInArray) self.attributedBuilder.shadow = nil;
+}
+
+
+- (void)textEffectLetterpressStyleWithObj:(NSString *)targetString {
+    [self textEffectLetterpressStyleWithRange:[self getRangeWithObj:targetString]];
+}
+
+- (void)textEffectLetterpressStyleWithRange:(NSRange)range {
+    if (!self.attributedBuilder.effectLetterpressStyle) return;
+    if ([self.attributedBuilder.effectLetterpressStyle boolValue]) [self addAttribute:NSTextEffectAttributeName value:NSTextEffectLetterpressStyle range:range];
+    if (!self.attributedBuilder.isAddingInArray) self.attributedBuilder.effectLetterpressStyle = nil;
+}
+
+
+- (void)textBaselineOffsetWithObj:(NSString *)targetString {
+    [self textBaselineOffsetWithRange:[self getRangeWithObj:targetString]];
+}
+
+- (void)textBaselineOffsetWithRange:(NSRange)range {
+    if (!self.attributedBuilder.baselineOffset) return;
+    [self addAttribute:NSBaselineOffsetAttributeName value:self.attributedBuilder.baselineOffset range:range];
+    if (!self.attributedBuilder.isAddingInArray) self.attributedBuilder.baselineOffset = nil;
+}
+
+
+- (void)textWriteDirectionWithObj:(NSString *)targetString {
+    [self textWriteDirectionWithRange:[self getRangeWithObj:targetString]];
+}
+
+- (void)textWriteDirectionWithRange:(NSRange)range {
+    if (!self.attributedBuilder.writingDirection) return;
+    [self addAttribute:NSWritingDirectionAttributeName value:self.attributedBuilder.writingDirection range:range];
+    if (!self.attributedBuilder.isAddingInArray) self.attributedBuilder.writingDirection = nil;
+}
+
+
+- (void)textLinkWithObj:(NSString *)targetString {
+    [self textLinkWithRange:[self getRangeWithObj:targetString]];
+}
+
+- (void)textLinkWithRange:(NSRange)range {
+    if (!self.attributedBuilder.link) return;
+    [self addAttribute:NSLinkAttributeName value:self.attributedBuilder.link range:range];
+    if (!self.attributedBuilder.isAddingInArray) self.attributedBuilder.link = nil;
+}
 
 - (void)insertAttachment:(NSTextAttachment *)attachment atIndex:(NSInteger)index {
     NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];

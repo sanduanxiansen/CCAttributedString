@@ -2,7 +2,7 @@
 //  AppDelegate.m
 //  CCAttributedString
 //
-//  Created by Daniujia on 2017/2/14.
+//  Created by CC on 2017/2/14.
 //  Copyright © 2017年 CC. All rights reserved.
 //
 
