@@ -1,5 +1,4 @@
 # CCAttributedString
-#CCAttributedString
 CCAttributedString是整理NSMutableAttributedString中AttributedName属性封装好的一个分类，通过链式编程，可以轻松完成对富文本的编辑。效果如下。
 ###代码：
 ```
@@ -56,7 +55,7 @@ CCAttributedString是整理NSMutableAttributedString中AttributedName属性封�
 ```
 ###效果：
 
-![效果图](https://ofc13b4jy.bkt.clouddn.com/Simulator%20Screen%20Shot%202017%E5%B9%B42%E6%9C%8817%E6%97%A5%20%E4%B8%8B%E5%8D%885.58.58.png)
+![效果图](http://ofc13b4jy.bkt.clouddn.com/showCCAttributedString.png)
 属性一览：
 ```
 @interface NSMutableAttributedString (CCAttributedString)
